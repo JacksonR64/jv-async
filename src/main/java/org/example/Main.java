@@ -18,18 +18,22 @@ public class Main {
             return "Hello... ";
 
         });
-        String part3 = String.valueOf(part1);
         CompletableFuture<String> part2 = CompletableFuture.supplyAsync(() -> {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                System.out.println("error");
             }
             return "...world!";
         });
 
+        BiFunction<String, String, String> function = (value, value2) -> combineFunctionality(value, value2);
 
+        CompletableFuture<String> thenCombineV = part1.thenCombine(part2, function);
 
+        part1.thenAccept(c -> c += part2.join());
+
+        System.out.println("OUTPUT: " + part1);
 
 
         try {
@@ -40,15 +44,12 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        BiFunction<String, String, String> function = (value, value2) -> combineFunctionality(value, value2);
 
 
-        CompletableFuture<String> thenCombine = part1.thenCombine(part2, function);
-
-        System.out.println("output: " + thenCombine.join());
 
 
     }
+/*
     public static String combineFunctionality(String input1, String input2) {
         System.out.println("part 1: " + input1);
         System.out.println("part 2: " + input2);
@@ -56,6 +57,7 @@ public class Main {
         return input1 + input2;
 
     }
+*/
 
 
 }
